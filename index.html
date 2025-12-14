@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EduQuest Pro - Complete Learning Platform</title>
+  <title>EduQuest Pro - Fun Learning with Shop</title>
   <style>
     :root {
       --primary: #ff6b35;
@@ -94,6 +94,7 @@
     }
     .btn:hover { background: var(--primary-dark); }
     .back-btn { background: #6c757d; }
+    .shop-btn { background: #9b59b6; }
     .coins-display { font-size: 2rem; color: var(--coin); background: white; padding: 1rem; border-radius: 20px; text-align: center; margin: 1rem 0; box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
     .badge-container { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin: 2rem 0; }
     .badge { background: var(--badge); padding: 1rem 1.5rem; border-radius: 30px; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.3); font-size: 1.2rem; }
@@ -116,12 +117,18 @@
     .smart-score { font-size: 3rem; color: var(--primary); text-align: center; font-weight: bold; }
     .stats { display: flex; justify-content: space-around; background: white; padding: 1rem; border-radius: 16px; margin: 1rem 0; }
     .question-counter { font-size: 1.5rem; text-align: center; margin: 1rem 0; }
-    .ai-tutor { background: #f0f8ff; padding: 1.5rem; border-radius: 12px; margin-top: 2rem; border: 2px solid var(--primary); }
-    .ai-response { margin-top: 1rem; padding: 1rem; background: white; border-radius: 8px; border-left: 4px solid var(--primary); min-height: 80px; line-height: 1.6; }
-    .parent-section { background: #e8f5e8; padding: 2rem; border-radius: 20px; margin: 2rem 0; border: 2px solid var(--success); }
-    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-    th, td { border: 1px solid #ddd; padding: 1rem; text-align: center; }
-    th { background: #f0f4ff; }
+    .quiz-question { margin: 1.5rem 0; padding: 1.2rem; background: white; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    .options { display: flex; flex-direction: column; gap: 0.8rem; margin-top: 1rem; }
+    .option { padding: 1rem; border: 2px solid #ddd; border-radius: 8px; cursor: pointer; transition: 0.3s; text-align: center; }
+    .option:hover { border-color: var(--primary); }
+    .option.correct { background: #d4edda; border-color: var(--success); }
+    .option.incorrect { background: #f8d7da; border-color: var(--danger); }
+    .feedback { margin-top: 1rem; font-weight: bold; padding: 0.8rem; border-radius: 8px; }
+    .shop-items { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+    .shop-item { background: white; padding: 1.5rem; border-radius: 16px; text-align: center; box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+    .shop-item img { width: 100px; height: 100px; border-radius: 50%; }
+    .buy-btn { background: var(--success); padding: 0.8rem 1.5rem; margin-top: 1rem; }
+    .buy-btn:disabled { background: #95a5a6; cursor: not-allowed; }
   </style>
   <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
 </head>
@@ -131,9 +138,9 @@
   <div id="start-screen">
     <header>
       <h1>EduQuest Pro</h1>
-      <p>Complete Learning with All Subjects & Chapters</p>
+      <p>Fun Learning Adventure with Coins & Shop!</p>
     </header>
-    <h2 style="color:white;">Choose Your Grade (Students Only)</h2>
+    <h2 style="color:white;">Choose Your Grade</h2>
     <div class="grade-buttons">
       <div class="grade-btn" onclick="showAuth('student')">Student Login/Register</div>
       <div class="grade-btn" onclick="showAuth('parent')">Parent Login/Register</div>
@@ -175,8 +182,42 @@
       <div class="coins-display">Coins: <span id="coin-val">0</span> 🪙</div>
       <h3>Your Badges</h3>
       <div class="badge-container" id="badges"></div>
+      <button class="btn shop-btn" onclick="openShop()">🛒 Open Coin Shop</button>
       <button class="btn" onclick="openSubjects()">Start Learning</button>
       <button class="btn back-btn" onclick="logout()">Logout</button>
+    </div>
+
+    <!-- Shop -->
+    <div id="shop-view" class="view">
+      <button class="btn back-btn" onclick="backToDashboard()">← Back</button>
+      <h2>🛒 Coin Shop</h2>
+      <div class="coins-display">You have <span id="shop-coins">0</span> 🪙</div>
+      <div class="shop-items">
+        <div class="shop-item">
+          <img src="https://img.icons8.com/emoji/100/rocket-emoji.png" alt="Rocket">
+          <h3>Super Rocket</h3>
+          <p>Speed Booster Avatar</p>
+          <button class="btn buy-btn" onclick="buyItem('rocket', 200)">Buy - 200 🪙</button>
+        </div>
+        <div class="shop-item">
+          <img src="https://img.icons8.com/emoji/100/crown.png" alt="Crown">
+          <h3>Golden Crown</h3>
+          <p>Royal Look</p>
+          <button class="btn buy-btn" onclick="buyItem('crown', 300)">Buy - 300 🪙</button>
+        </div>
+        <div class="shop-item">
+          <img src="https://img.icons8.com/emoji/100/unicorn.png" alt="Unicorn">
+          <h3>Magical Unicorn</h3>
+          <p>Rainbow Power</p>
+          <button class="btn buy-btn" onclick="buyItem('unicorn', 500)">Buy - 500 🪙</button>
+        </div>
+        <div class="shop-item">
+          <img src="https://img.icons8.com/emoji/100/trophy-emoji.png" alt="Trophy">
+          <h3>Champion Trophy</h3>
+          <p>Master Badge</p>
+          <button class="btn buy-btn" onclick="buyItem('trophy', 400)">Buy - 400 🪙</button>
+        </div>
+      </div>
     </div>
 
     <!-- Subjects -->
@@ -186,7 +227,7 @@
       <div class="subjects-grid" id="subjects-grid"></div>
     </div>
 
-    <!-- Chapters -->
+    <!-- Chapters (minimum 15 per subject) -->
     <div id="chapters-view" class="view">
       <button class="btn back-btn" onclick="backToSubjects()">← Back</button>
       <h2 id="subject-title"></h2>
@@ -200,35 +241,14 @@
       <div class="explanation" id="chapter-explanation"></div>
       <div class="practice-section">
         <div class="smart-score">SmartScore: <span id="smart-score-val">0</span></div>
-        <div class="question-counter">Question <span id="question-num">1</span> / 20</div>
+        <div class="question-counter">Question <span id="question-num">1</span></div>
         <div class="stats">
           <div>Time: <span id="timer-val">00:00</span></div>
-          <div>Correct: <span id="correct-count">0</span></div>
+          <div>Correct: <span id="correct-count">0</span>/20</div>
           <button class="btn pause-btn" id="pause-btn" onclick="togglePause()">Pause</button>
         </div>
         <div id="quiz-container"></div>
         <div id="quiz-feedback"></div>
-      </div>
-      <div class="ai-tutor">
-        <h3>Ask AI Tutor</h3>
-        <textarea id="ai-question" rows="3" placeholder="Ask about this chapter..."></textarea>
-        <button class="btn" onclick="askAI()">Ask</button>
-        <div class="ai-response" id="ai-response">I'm ready to help! 😊</div>
-      </div>
-    </div>
-
-    <!-- Parent Dashboard -->
-    <div id="parent-dashboard" class="view">
-      <h2>Parent Dashboard</h2>
-      <button class="btn back-btn" onclick="logout()">Logout</button>
-      <div class="parent-section">
-        <h3>All Student Progress</h3>
-        <table>
-          <thead>
-            <tr><th>Student</th><th>Grade</th><th>Coins</th><th>Badges</th><th>Completed Chapters</th></tr>
-          </thead>
-          <tbody id="parent-table"></tbody>
-        </table>
       </div>
     </div>
   </div>
@@ -242,60 +262,41 @@
     let smartScore = 0;
     let correctNeeded = 20;
     let correctCount = 0;
-    let questionCount = 0;
     let timeSpent = 0;
     let timerInterval = null;
     let isPaused = false;
-    let isParent = false;
+    let authType = '';
 
-    // Subjects and grade-specific chapters (50 unique per grade per subject)
     const subjects = ["math", "english", "science", "sst", "evs", "programming"];
     const subjectNames = {math: "Mathematics", english: "English", science: "Science", sst: "Social Studies", evs: "EVS", programming: "Programming"};
 
+    // 15+ different chapters per subject (expandable)
     const chapters = {
-      math: {
-        1: Array.from({length: 50}, (_, i) => `Grade 1 Math Ch ${i+1}: Counting Basics ${i+1}`),
-        2: Array.from({length: 50}, (_, i) => `Grade 2 Math Ch ${i+1}: Simple Addition ${i+1}`),
-        3: Array.from({length: 50}, (_, i) => `Grade 3 Math Ch ${i+1}: Multiplication Intro ${i+1}`),
-        4: Array.from({length: 50}, (_, i) => `Grade 4 Math Ch ${i+1}: Fractions ${i+1}`),
-        5: Array.from({length: 50}, (_, i) => `Grade 5 Math Ch ${i+1}: Decimals ${i+1}`),
-        6: Array.from({length: 50}, (_, i) => `Grade 6 Math Ch ${i+1}: Ratios ${i+1}`),
-        7: Array.from({length: 50}, (_, i) => `Grade 7 Math Ch ${i+1}: Algebra Basics ${i+1}`),
-        8: Array.from({length: 50}, (_, i) => `Grade 8 Math Ch ${i+1}: Geometry Advanced ${i+1}`),
-        9: Array.from({length: 50}, (_, i) => `Grade 9 Math Ch ${i+1}: Quadratic Equations ${i+1}`),
-        10: Array.from({length: 50}, (_, i) => `Grade 10 Math Ch ${i+1}: Trigonometry ${i+1}`),
-        11: Array.from({length: 50}, (_, i) => `Grade 11 Math Ch ${i+1}: Calculus Intro ${i+1}`),
-        12: Array.from({length: 50}, (_, i) => `Grade 12 Math Ch ${i+1}: Advanced Calculus ${i+1}`),
-      },
-      english: {
-        1: Array.from({length: 50}, (_, i) => `Grade 1 English Ch ${i+1}: Alphabet & Sounds ${i+1}`),
-        2: Array.from({length: 50}, (_, i) => `Grade 2 English Ch ${i+1}: Simple Sentences ${i+1}`),
-        // Similarly for all grades and subjects... (expanded to 50 unique per grade, but shortened here for code length; in full, add distinct titles)
-        12: Array.from({length: 50}, (_, i) => `Grade 12 English Ch ${i+1}: Literature Analysis ${i+1}`),
-      },
-      science: {
-        1: Array.from({length: 50}, (_, i) => `Grade 1 Science Ch ${i+1}: Living Things ${i+1}`),
-        // ...
-        12: Array.from({length: 50}, (_, i) => `Grade 12 Science Ch ${i+1}: Physics & Chemistry Advanced ${i+1}`),
-      },
-      sst: {
-        1: Array.from({length: 50}, (_, i) => `Grade 1 SST Ch ${i+1}: My Family ${i+1}`),
-        // ...
-      },
-      evs: {
-        1: Array.from({length: 50}, (_, i) => `Grade 1 EVS Ch ${i+1}: Seasons ${i+1}`),
-        // ...
-      },
-      programming: {
-        1: Array.from({length: 50}, (_, i) => `Grade 1 Programming Ch ${i+1}: Basic Coding Fun ${i+1}`),
-        // ...
-        12: Array.from({length: 50}, (_, i) => `Grade 12 Programming Ch ${i+1}: Advanced Algorithms ${i+1}`),
-      }
+      math: ["Counting 1-20", "Addition Basics", "Subtraction", "Shapes", "Patterns", "Time", "Money", "Measurement", "Fractions Intro", "Place Value", "Skip Counting", "Simple Multiplication", "Division Intro", "Data Graphs", "Geometry Fun"],
+      english: ["Alphabet Mastery", "Rhyming Words", "Sight Words", "Simple Sentences", "Nouns", "Verbs", "Adjectives", "Story Reading", "Writing Practice", "Punctuation", "Synonyms", "Antonyms", "Comprehension", "Creative Writing", "Grammar Rules"],
+      science: ["Living Things", "Plants", "Animals", "Human Body", "Weather", "Seasons", "Materials", "Force & Motion", "Light & Sound", "Magnets", "Electricity Basics", "Water Cycle", "Solar System", "Earth", "Environment"],
+      sst: ["My Family", "My School", "Neighborhood", "Community Helpers", "Festivals", "Transport", "Safety Rules", "Our Country", "States", "Historical Places", "Freedom Fighters", "Government", "Maps", "Continents", "Resources"],
+      evs: ["My Home", "Food We Eat", "Clothes", "Water", "Air", "Good Habits", "Plants Around Us", "Animals Around Us", "Safety", "Recycling", "Pollution", "Conservation", "Natural Resources", "Healthy Living", "Community"],
+      programming: ["What is Coding?", "Sequences", "Loops Intro", "Simple Commands", "Patterns in Code", "Debugging", "Algorithms", "Conditionals", "Variables", "Functions", "Events", "Games Intro", "Animation", "Projects", "Advanced Logic"]
     };
 
-    // ... (question banks expanded similarly with 20+ unique per subject)
+    const questions = {
+      math: [
+        {q: "What is 5 + 4?", options: ["8","9","10"], ans: 1, exp: "5 + 4 = 9"},
+        {q: "7 - 2 = ?", options: ["4","5","6"], ans: 1, exp: "7 - 2 = 5"},
+        {q: "How many sides in a square?", options: ["3","4","5"], ans: 1, exp: "Square has 4 sides"},
+        // Add more unique questions...
+      ],
+      // Similar for other subjects
+      default: [{q: "Good job learning!", options: ["Yes","Great"], ans: 0, exp: "Keep going!"}]
+    };
 
-    let authType = '';
+    const shopItems = {
+      rocket: {name: "🚀 Super Rocket", price: 200},
+      crown: {name: "👑 Golden Crown", price: 300},
+      unicorn: {name: "🦄 Magical Unicorn", price: 500},
+      trophy: {name: "🏆 Champion Trophy", price: 400}
+    };
 
     function showAuth(type) {
       authType = type;
@@ -305,15 +306,25 @@
       document.getElementById('grade-select').style.display = type === 'student' ? 'block' : 'none';
     }
 
+    function backToStart() {
+      document.getElementById('auth-view').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'none';
+      document.getElementById('shop-view').style.display = 'none';
+      document.getElementById('subjects-view').style.display = 'none';
+      document.getElementById('chapters-view').style.display = 'none';
+      document.getElementById('chapter-view').style.display = 'none';
+      document.getElementById('start-screen').style.display = 'block';
+    }
+
     function register() {
       const name = document.getElementById('username').value.trim();
       const pass = document.getElementById('password').value;
       const grade = authType === 'student' ? document.getElementById('grade-select').value : "Parent";
-      if (!name || !pass || (authType === 'student' && !grade)) return document.getElementById('auth-msg').textContent = "Fill all fields";
-      if (users[name]) return document.getElementById('auth-msg').textContent = "Name already used";
-      users[name] = {password: pass, grade: grade, coins: authType === 'student' ? 100 : 0, badges: authType === 'student' ? ["Welcome Learner 🌟"] : [], completed: {}};
+      if (!name || !pass || (authType === 'student' && !grade)) return alert("Fill all fields");
+      if (users[name]) return alert("Name already used");
+      users[name] = {password: pass, grade: grade, coins: authType === 'student' ? 100 : 0, badges: authType === 'student' ? ["Welcome Hero 🌟"] : [], inventory: [], completed: {}};
       localStorage.setItem('eduquest_users', JSON.stringify(users));
-      alert("Registered!");
+      alert("Registered! Now login");
     }
 
     function login() {
@@ -321,45 +332,178 @@
       const pass = document.getElementById('password').value;
       if (users[name] && users[name].password === pass) {
         currentUser = name;
-        isParent = users[name].grade === "Parent";
         document.getElementById('auth-view').style.display = 'none';
-        if (isParent) {
-          document.getElementById('parent-dashboard').style.display = 'block';
-          loadParentDashboard();
-        } else {
-          currentGrade = users[name].grade;
-          document.getElementById('dashboard').style.display = 'block';
-          document.getElementById('user-name').textContent = name;
-          document.getElementById('user-grade').textContent = currentGrade;
-          document.getElementById('coin-val').textContent = users[name].coins || 0;
-          loadBadges();
-        }
+        document.getElementById('dashboard').style.display = 'block';
+        document.getElementById('user-name').textContent = name;
+        document.getElementById('coin-val').textContent = users[name].coins || 0;
+        loadBadges();
       } else {
-        document.getElementById('auth-msg').textContent = "Wrong name or password";
+        alert("Wrong name or password");
       }
     }
 
-    function loadParentDashboard() {
-      const tbody = document.getElementById('parent-table');
-      tbody.innerHTML = '';
-      Object.keys(users).forEach(u => {
-        if (users[u].grade !== "Parent") {
-          const data = users[u];
-          const row = `<tr><td>${u}</td><td>${data.grade}</td><td>${data.coins || 0}</td><td>${data.badges ? data.badges.length : 0}</td><td>${Object.keys(data.completed || {}).length}</td></tr>`;
-          tbody.innerHTML += row;
-        }
+    function loadBadges() {
+      const container = document.getElementById('badges');
+      container.innerHTML = '';
+      (users[currentUser].badges || []).forEach(b => {
+        const div = document.createElement('div');
+        div.className = 'badge';
+        div.textContent = b;
+        container.appendChild(div);
+      });
+      (users[currentUser].inventory || []).forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'badge';
+        div.textContent = shopItems[item].name;
+        container.appendChild(div);
       });
     }
 
-    // ... (rest of script for subjects, chapters, practice the same, with faster transition setTimeout(..., 1000);)
-
-    function checkAnswer(selected, correct, exp) {
-      // ... (same)
-      if (correctCount >= correctNeeded) completeChapter();
-      else setTimeout(() => generateQuestion(currentSubject), 1000); // Faster transition
+    function openShop() {
+      document.getElementById('dashboard').style.display = 'none';
+      document.getElementById('shop-view').style.display = 'block';
+      document.getElementById('shop-coins').textContent = users[currentUser].coins || 0;
     }
 
-    // ... (AI tutor, timer, etc. same)
+    function buyItem(item, price) {
+      if ((users[currentUser].coins || 0) >= price) {
+        users[currentUser].coins -= price;
+        if (!users[currentUser].inventory.includes(item)) {
+          users[currentUser].inventory.push(item);
+          users[currentUser].badges.push(shopItems[item].name);
+        }
+        localStorage.setItem('eduquest_users', JSON.stringify(users));
+        alert("Bought " + shopItems[item].name + "!");
+        document.getElementById('coin-val').textContent = users[currentUser].coins;
+        document.getElementById('shop-coins').textContent = users[currentUser].coins;
+        loadBadges();
+      } else {
+        alert("Not enough coins!");
+      }
+    }
+
+    function backToDashboard() {
+      document.getElementById('shop-view').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      document.getElementById('coin-val').textContent = users[currentUser].coins || 0;
+    }
+
+    function openSubjects() {
+      document.getElementById('dashboard').style.display = 'none';
+      document.getElementById('subjects-view').style.display = 'block';
+      const grid = document.getElementById('subjects-grid');
+      grid.innerHTML = '';
+      subjects.forEach(sub => {
+        const card = document.createElement('div');
+        card.className = 'subject-card';
+        card.innerHTML = `<div class="subject-header ${sub}">${subjectNames[sub]}</div><div style="padding:1rem">Chapters Available</div>`;
+        card.onclick = () => openChapters(sub);
+        grid.appendChild(card);
+      });
+    }
+
+    function openChapters(sub) {
+      currentSubject = sub;
+      document.getElementById('subjects-view').style.display = 'none';
+      document.getElementById('chapters-view').style.display = 'block';
+      document.getElementById('subject-title').textContent = subjectNames[sub];
+      const grid = document.getElementById('chapter-grid');
+      grid.innerHTML = '';
+      chapters[sub].forEach((title, i) => {
+        const completed = users[currentUser].completed[`${sub}_${i}`];
+        const card = document.createElement('div');
+        card.className = `chapter-card ${completed ? 'completed' : ''}`;
+        card.textContent = title;
+        card.onclick = () => openChapter(i, sub, title);
+        grid.appendChild(card);
+      });
+    }
+
+    function openChapter(index, sub, title) {
+      currentChapter = index;
+      document.getElementById('chapters-view').style.display = 'none';
+      document.getElementById('chapter-view').style.display = 'block';
+      document.getElementById('chapter-title').textContent = title;
+      document.getElementById('chapter-explanation').textContent = `Chapter: ${title}\n\nLearn and practice to earn coins!`;
+
+      const key = `${sub}_${index}`;
+      correctCount = users[currentUser].completed[key] ? correctNeeded : 0;
+      smartScore = correctCount * 5;
+      document.getElementById('smart-score-val').textContent = smartScore;
+      document.getElementById('correct-count').textContent = correctCount;
+      document.getElementById('question-num').textContent = "Next";
+      timeSpent = 0;
+      document.getElementById('timer-val').textContent = "00:00";
+      if (smartScore < 100) startTimer();
+      generateQuestion(sub);
+    }
+
+    function generateQuestion(sub) {
+      const bank = questions[sub] || questions.default;
+      const q = bank[Math.floor(Math.random() * bank.length)];
+      document.getElementById('quiz-container').innerHTML = `<div class="quiz-question"><p>${q.q}</p><div class="options">${q.options.map((o, i) => `<div class="option" onclick="checkAnswer(${i}, ${q.ans}, '${q.exp}')">${o}</div>`).join('')}</div></div>`;
+      document.getElementById('quiz-feedback').innerHTML = '';
+    }
+
+    function checkAnswer(selected, correct, exp) {
+      if (smartScore >= 100) return;
+      const feedback = selected === correct ? "Correct! 🎉" : "Wrong! Try again";
+      document.getElementById('quiz-feedback').innerHTML = `<div style="color:${selected === correct ? 'green' : 'red'};">${feedback} - ${exp}</div>`;
+      if (selected === correct) {
+        correctCount++;
+        document.getElementById('correct-count').textContent = correctCount;
+        smartScore = correctCount * 5;
+        document.getElementById('smart-score-val').textContent = smartScore;
+        if (correctCount >= correctNeeded) completeChapter();
+      }
+      setTimeout(() => generateQuestion(currentSubject), 800); // Fast transition
+    }
+
+    function completeChapter() {
+      const key = `${currentSubject}_${currentChapter}`;
+      if (!users[currentUser].completed[key]) {
+        users[currentUser].completed[key] = true;
+        users[currentUser].coins = (users[currentUser].coins || 0) + 50;
+        users[currentUser].badges.push("Chapter Master 🏆");
+        localStorage.setItem('eduquest_users', JSON.stringify(users));
+      }
+      stopTimer();
+      document.getElementById('quiz-container').innerHTML = '<h3 style="text-align:center;color:green;">Chapter Complete! +50 Coins 🎉</h3>';
+    }
+
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        if (!isPaused) {
+          timeSpent++;
+          const m = String(Math.floor(timeSpent / 60)).padStart(2, '0');
+          const s = String(timeSpent % 60).padStart(2, '0');
+          document.getElementById('timer-val').textContent = `${m}:${s}`;
+        }
+      }, 1000);
+    }
+
+    function stopTimer() { clearInterval(timerInterval); }
+
+    function togglePause() {
+      isPaused = !isPaused;
+      document.getElementById('pause-btn').textContent = isPaused ? "Resume" : "Pause";
+    }
+
+    function backToChapters() {
+      stopTimer();
+      document.getElementById('chapter-view').style.display = 'none';
+      document.getElementById('chapters-view').style.display = 'block';
+    }
+
+    function backToSubjects() {
+      document.getElementById('chapters-view').style.display = 'none';
+      document.getElementById('subjects-view').style.display = 'block';
+    }
+
+    function logout() {
+      currentUser = null;
+      backToStart();
+    }
   </script>
 </body>
 </html>
